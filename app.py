@@ -23,6 +23,7 @@ except Exception as e:
 @app.route("/", methods=["GET", "POST"])
 def home():
     prediction = ""
+    review = ""
 
     if request.method == "POST":
         # Retrieve and clean input text
@@ -56,7 +57,7 @@ def home():
             flash(f"An error occurred during prediction: {e}", "danger")
             return redirect(url_for("home"))
 
-    return render_template("index.html", prediction=prediction)
+    return render_template("index.html", prediction=prediction, review=review)
 
 
 if __name__ == "__main__":
