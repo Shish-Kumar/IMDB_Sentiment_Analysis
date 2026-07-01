@@ -7,13 +7,10 @@ ENV/
 .vscode/
 .idea/
 
-# Ignore large datasets
-IMDB Dataset.csv
-*.csv
+# Allow dataset and notebook for educational purposes
+# (Removed ignore rules for IMDB Dataset.csv and experiments_OR_NoteBook/)
 
-# Ignore experimental notebooks and scripts
-experiments_OR_NoteBook/
-*.ipynb
+# Ignore temporary testing scripts
 check_model_accuracy.py
 compare_algorithms.py
 grid_search_tune.py
