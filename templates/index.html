@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMDb Sentiment Analyzer Pro</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Animated Background Elements -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <div class="wrapper">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="alerts-container">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <div class="alert-icon">
+                    {% if category == 'success' %}<i class="fa-solid fa-check-circle"></i>{% else %}<i class="fa-solid fa-circle-exclamation"></i>{% endif %}
+                </div>
+                <div class="alert-text">{{ message }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Main Card -->
+        <div class="analyzer-card">
+            <div class="card-header">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-film movie-icon"></i>
+                </div>
+                <h2>IMDb Sentiment <span class="highlight">Analyzer</span></h2>
+                <p>Experience AI-powered movie review analysis.</p>
+            </div>
+
+            <form action="{{ url_for('home') }}" method="POST" id="analyzeForm">
+                <div class="form-group">
+                    <div class="textarea-wrapper">
+                        <textarea id="review" name="review" rows="5"
+                            placeholder="Type or paste a movie review here to discover its true sentiment..."></textarea>
+                        <div class="focus-border"></div>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    {% if prediction %}
+                    <div class="result-container {% if 'Positive' in prediction %}status-positive{% else %}status-negative{% endif %} animate-pop-in">
+                        <div class="result-icon">
+                            {% if 'Positive' in prediction %}
+                            <i class="fa-solid fa-face-smile-beam"></i>
+                            {% else %}
+                            <i class="fa-solid fa-face-frown-open"></i>
+                            {% endif %}
+                        </div>
+                        <div class="result-text">{{ prediction.replace('😊 ', '').replace('😞 ', '') }}</div>
+                    </div>
+                    {% else %}
+                    <div class="result-placeholder"></div>
+                    {% endif %}
+
+                    <div class="btn-group">
+                        <a href="{{ url_for('home') }}" class="btn btn-reset">
+                            <i class="fa-solid fa-rotate-right"></i> Reset
+                        </a>
+                        <button type="submit" class="btn btn-submit" id="submitBtn">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Analyze
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="footer-credits">
+            <p>Powered by <strong>Machine Learning</strong></p>
+        </div>
+
+    </div>
+
+    <script>
+        // Simple script to add loading state to button
+        document.getElementById('analyzeForm').addEventListener('submit', function() {
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...';
+            btn.classList.add('loading');
+        });
+    </script>
+</body>
+
+</html>
